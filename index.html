@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#000000" />
+		<link rel="shortcut icon" type="image/ico" href="/src/assets/favicon.ico" />
+		<title>Solid App</title>
+
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+		<style type="text/css">
+			:root {
+				--bs-blue: #0d6efd;
+				--bs-indigo: #6610f2;
+				--bs-purple: #6f42c1;
+				--bs-pink: #d63384;
+				--bs-red: #dc3545;
+				--bs-orange: #fd7e14;
+				--bs-yellow: #ffc107;
+				--bs-green: #198754;
+				--bs-teal: #20c997;
+				--bs-cyan: #0dcaf0;
+				--bs-white: #fff;
+				--bs-gray: #8b8b8b;
+				--bs-gray-dark: #343a40;
+				--bs-gray-100: #f8f8f8;
+				--bs-gray-200: #e9ecef;
+				--bs-gray-300: #d9d9d9;
+				--bs-gray-400: #ced4da;
+				--bs-gray-500: #adb5bd;
+				--bs-gray-600: #8b8b8b;
+				--bs-gray-700: #495057;
+				--bs-gray-800: #343a40;
+				--bs-gray-900: #1a1919;
+				--bs-primary: #ea5644;
+				--bs-secondary: #f68f57;
+				--bs-success: #198754;
+				--bs-info: #0dcaf0;
+				--bs-warning: #ffc107;
+				--bs-danger: #dc3545;
+				--bs-light: #f8f8f8;
+				--bs-dark: #1a1919;
+				--bs-primary-rgb: 234, 86, 68;
+				--bs-secondary-rgb: 246, 143, 87;
+				--bs-success-rgb: 25, 135, 84;
+				--bs-info-rgb: 13, 202, 240;
+				--bs-warning-rgb: 255, 193, 7;
+				--bs-danger-rgb: 220, 53, 69;
+				--bs-light-rgb: 248, 248, 248;
+				--bs-dark-rgb: 26, 25, 25;
+				--bs-white-rgb: 255, 255, 255;
+				--bs-black-rgb: 0, 0, 0;
+				--bs-body-color-rgb: 26, 25, 25;
+				--bs-body-bg-rgb: 255, 255, 255;
+				--bs-font-sans-serif: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+				--bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+				--bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+				--bs-body-font-family: var(--bs-font-sans-serif);
+				--bs-body-font-size: 1.4rem;
+				--bs-body-font-weight: 400;
+				--bs-body-line-height: 1.5;
+				--bs-body-color: #1a1919;
+			}
+
+			html,
+			body {
+				font-family: 'Inter';
+				font-size: 10px;;
+			}
+
+			.quiz__title {
+				font-weight: 600;
+				font-size: 2rem;
+				line-height: 1;
+				margin-bottom: 2rem;
+			}
+
+			.quiz__answers {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.quiz__answer {
+				position: relative;
+				display: flex;
+				padding: 1.5rem;
+				width: 100%;
+				border: 1px solid var(--bs-gray-300);
+				background-color: var(--bs-gray-100);
+				font-weight: 600;
+				font-size: 1.6rem;
+				line-height: 1.3125;
+				gap: 1.8rem;
+			}
+
+			.quiz__answer:before {
+				flex-shrink: 0;
+				width: 2rem;
+				height: 2rem;
+				border: 1px solid var(--bs-gray-300);
+				background-color: var(--bs-white);
+				content: '';
+			}
+
+			.quiz__answer-checked {
+				border: 1px solid var(--bs-primary);
+				color: var(--bs-primary);
+			}
+
+			.quiz__answer-checked:before {
+				background-color: var(--bs-primary);
+			}
+
+			.quiz__checkbox {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<noscript>You need to enable JavaScript to run this app.</noscript>
+		<div id="quiz"></div>
+
+		<script src="/src/index.tsx" type="module"></script>
+	</body>
+</html>
