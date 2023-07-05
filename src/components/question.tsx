@@ -1,8 +1,10 @@
-import { For } from "solid-js";
+import { For, splitProps } from "solid-js";
 import { IQuestion } from "../structures/question";
 import Answer from "./answer";
 
-const Question = (question: IQuestion) => {
+const Question = (props: { question: IQuestion, toggleAnswerChecked: Function }) => {
+	const question = props.question;
+
 	return (
 		<div class="quiz__question">
 			<div class="quiz__title mb-6">
@@ -12,7 +14,7 @@ const Question = (question: IQuestion) => {
 			<div class="quiz__answers">
 				<For each={question.answers}>
 					{(answer, i) =>
-						<Answer id={answer.id} text={answer.text} checked={answer.checked} question_id={question.id} />
+						<Answer answer={answer} questionId={question.id} toggleAnswerChecked={props.toggleAnswerChecked} />
 					}
 				</For>
 			</div>

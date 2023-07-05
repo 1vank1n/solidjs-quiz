@@ -1,13 +1,15 @@
 import { IAnswer } from "../structures/answer";
-import { useAnswer } from "../providers/answer_provider"
 
-const Answer = (answer: IAnswer) => {
-	const toggleAnswerChecked = useAnswer();
+const Answer = (props: { answer: IAnswer, questionId: number, toggleAnswerChecked: Function }) => {
+	const answer = props.answer;
 
 	return (<label class={answer.checked ? 'quiz__answer quiz__answer-checked' : 'quiz__answer'}
-	// onclick={
-	// 	() => toggleAnswerChecked(1, answer.id)
-	// }
+		onclick={
+			(e) => {
+				e.preventDefault();
+				props.toggleAnswerChecked(props.questionId, answer.id);
+			}
+		}
 	>
 		<input class="quiz__checkbox" type="checkbox" /> {answer.text}
 	</label>);

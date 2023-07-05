@@ -3,11 +3,11 @@ import { createStore, produce } from 'solid-js/store';
 import { render } from 'solid-js/web';
 
 import Question from './components/question';
-import { AnswerProvider } from './providers/answer_provider';
 import { IQuestion } from './structures/question';
 import { TQuiz } from './structures/quiz';
 
 interface State {
+	quizId: number
 	questionOrder: number
 	questions: IQuestion[]
 	answers: { [key: number]: number[] }
@@ -15,13 +15,14 @@ interface State {
 
 const Quiz = (props: { id: number }) => {
 	const [state, setState] = createStore<State>({
+		quizId: props.id,
 		questionOrder: 0,
 		questions: [],
 		answers: [],
 	})
 
 	onMount(async () => {
-		const fetchedQuiz = await getQuiz(props);
+		const fetchedQuiz = await apiGetQuiz(props);
 		setState(produce((s) => s.questions = fetchedQuiz.questions))
 	});
 
@@ -37,39 +38,55 @@ const Quiz = (props: { id: number }) => {
 		}
 	}
 
-	function toggleAnswerChecked(question_id: number, answer_id: number) {
+	function sendAnswers() {
+		apiSendAnswers(state.quizId, state.answers);
+	}
+
+	function toggleAnswerChecked(questionId: number, answerId: number): void {
 		setState(produce((s) => {
-			const question = s.questions.find((question) => question.id === question_id);
-			const answer = question?.answers.find((answer) => answer.id === answer_id);
+			const question = s.questions.find((question) => question.id === questionId);
+			const answer = question?.answers.find((answer) => answer.id === answerId);
 			if (answer !== undefined) {
 				answer.checked = !answer.checked;
 			}
+
+			s.answers = formatAnswersFromQuestions(s.questions);
 			return s;
 		}));
 	}
 
-	return <>
-		<AnswerProvider toggleAnswerChecked={toggleAnswerChecked}>
-			<Show when={state.questions} fallback="Loading...">
-				<For each={state.questions}>
-					{
-						(question, i) =>
-							<Show when={i() == state.questionOrder}>
-								<Question id={question.id} text={question.text} answers={question.answers} />
-							</Show>
-					}
-				</For>
+	function formatAnswersFromQuestions(questions: IQuestion[]): { [key: number]: number[]; } {
+		const answers: { [key: number]: number[] } = {};
+		for (const question of questions) {
+			answers[question.id] = [];
+			for (const answer of question.answers) {
+				answer.checked && answers[question.id].push(answer.id);
+			}
+		}
+		return answers;
+	}
 
-				<button onclick={prevQuestion}>prev</button>
-				<button onclick={nextQuestion}>next</button>
-			</Show>
-		</AnswerProvider>
+	return <>
+		<Show when={state.questions} fallback="Loading...">
+			<For each={state.questions}>
+				{
+					(question, i) =>
+						<Show when={i() == state.questionOrder}>
+							<Question question={question} toggleAnswerChecked={toggleAnswerChecked} />
+						</Show>
+				}
+			</For>
+
+			<button onclick={prevQuestion}>prev</button>
+			<button onclick={nextQuestion}>next</button>
+			<button onclick={sendAnswers}>submit</button>
+		</Show>
 	</>;
 }
 
-render(() => <Quiz id={3} />, document.getElementById('quiz'));
+render(() => <Quiz id={3} />, document.getElementById('quiz')!);
 
-async function getQuiz(props: any) {
+async function apiGetQuiz(props: any) {
 	// const response = await fetch(`/api/v1/quiz/${props.id}/`);
 	// const results = await response.json();
 	// const fetchedQuiz = results as TQuiz;
@@ -120,4 +137,15 @@ async function getQuiz(props: any) {
 		],
 		"created": "2023-05-03T19:30:41.850006+03:00"
 	} as TQuiz;
+}
+
+async function apiSendAnswers(quizId: number, answers: { [key: number]: number[] }): Promise<Response> {
+	const response = await fetch(`/api/v1/quiz/${quizId}/`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(answers),
+	});
+	return response;
 }
